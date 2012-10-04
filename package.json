@@ -4,7 +4,8 @@
     "version": "0.0.1",
     "private": true,
     "dependencies": {
-        "express": "3.x"
+        "express": "3.x",
+        "mongodb": "1.1.8"
     },
     "engines": {
         "node": "0.8.4",
