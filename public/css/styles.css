@@ -1,0 +1,95 @@
+.brand {
+    font-family: 'Arvo';
+}
+
+a.plain:link
+{ color: #333; text-decoration: none; }
+a.plain:active
+{ color: #333; text-decoration: none; }
+a.plain:visited
+{ color: #333; text-decoration: none; }
+a.plain:hover
+{ color: #333; text-decoration: none; }
+
+.status-bar {
+    height: 60px;
+}
+
+.about-icon {
+    float: left;
+    margin-right: 12px;
+}
+
+.footer {
+    margin-top: 30px;
+    padding-top: 10px;
+    color: #999;
+    border-top: solid 1px #ddd;
+}
+
+.footer > p {
+    padding-top:4px !important;
+    padding-bottom:4px !important;
+}
+
+h5 {
+    width:100%;
+    white-space:nowrap;
+    margin-bottom: 4px;
+}
+
+.thumbnail {
+    min-width: 260px;
+}
+
+.thumbnails li {
+    margin-left: 0px !important;
+    margin-right: 20px !important;
+}
+
+legend {
+    font-family: 'Andika';
+}
+
+.home-hero {
+    font-family: "Andika";
+    font-size: 36;
+    color: white;
+    background-image: url('img/bg.jpg');
+    background-size:cover;
+    background-repeat:no-repeat;
+    margin-top:-19px;
+    padding:10pc;
+    text-align: center;
+    text-shadow: 1px 1px 1px #000;
+}
+
+.home-hero .btn {
+    font-family: "arvo";
+    width: 160px;
+    margin:10px 4px;
+}
+
+/* Social proof buttons from GitHub & Twitter */
+.bs-docs-social {
+  padding: 15px 0;
+  text-align: center;
+  background-color: #f5f5f5;
+  border-top: 1px solid #fff;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Quick links on Home */
+.bs-docs-social-buttons {
+  margin-left: 0;
+  margin-bottom: 0;
+  padding-left: 0;
+  list-style: none;
+}
+.bs-docs-social-buttons li {
+  display: inline-block;
+  padding: 5px 8px;
+  line-height: 1;
+  *display: inline;
+  *zoom: 1;
+}
