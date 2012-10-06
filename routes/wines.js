@@ -50,7 +50,6 @@ exports.addWine = function(req, res) {
             }
         });
     });
-    res.send(wine);
 }
 
 exports.updateWine = function(req, res) {
@@ -70,7 +69,6 @@ exports.updateWine = function(req, res) {
             }
         });
     });
-    res.send(wine);
 }
 
 exports.deleteWine = function(req, res) {
@@ -86,7 +84,6 @@ exports.deleteWine = function(req, res) {
             }
         });
     });
-      res.send(req.body);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
