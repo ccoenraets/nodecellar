@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Node Cellar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+        }
+    </style>
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+
+    <script src="http://use.edgefonts.net/andika.js"></script>
+    <script src="http://use.edgefonts.net/arvo.js"></script>
+
+</head>
+
+<html>
+<body>
+
+<div class="header">
+    <div class="navbar navbar-fixed-top" style="z-index: 10;">
+        <div class="navbar-inner">
+            <div class="container">
+                <a class="brand" href="#">Real Time Analytics</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+
+    <div class="row-fluid" >
+
+        <div id="content" class="span12">
+
+
+            <div class="well span3" style="text-align: center;">
+                    <h3>Right Now</h3>
+                    <p id="connections" style="font-size: 96px;line-height: 96px;">0</p>
+                    <h5>active visitors</h5>
+            </div>
+
+            <div class="span9">
+
+                <legend>Real Time Activity</legend>
+                <div class="row-fluid">
+                    <table id="visits" class="table table-bordered table-striped table-condensed">
+                        <thead>
+                            <tr><td>URL</td><td>IP</td><td>Timestamp</td></tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <legend>Page Views</legend>
+                <div class="row-fluid">
+                    <table id="pageViews" class="table table-bordered table-striped table-condensed">
+                        <thead>
+                            <tr><td>URL</td><td>Page Views</td></tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>Built as a sample application with
+            <a href="http://nodejs.org/">Node.js</a>,
+            <a href="http://socket.io/">Socket.io</a>,
+            <a href="http://expressjs.com/">Express</a>, and
+        <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a>,
+        by <a href="http://coenraets.org" target="_blank">Christophe Coenraets</a>.<br/>
+        The source code for this application is available in <a href="#">this repository</a> on GitHub.</p>
+    </footer>
+
+</div>
+
+<script type="text/javascript" src="socket.io/socket.io.js"></script>
+<script type="text/javascript" src="lib/jquery-1.8.2.min.js"></script>
+
+<script>
+
+    var socket = io.connect('http://localhost:3000');
+    var pages = {};
+    var lastPageId = 0;
+
+    socket.on('connect', function () {
+
+        console.log('Socket connected');
+
+        socket.on('pageview', function (msg) {
+            $('#connections').html(msg.connections);
+            if (msg.url) {
+                if ($('#visits tr').length > 10) {
+                    $('#visits tr:last').remove();
+                }
+                $('#visits tbody').prepend('<tr><td>' + msg.url + '</td><td>' + msg.ip + '</td><td>' + msg.timestamp + '</td></tr>');
+
+                if (pages[msg.url]) {
+                    pages[msg.url].views = pages[msg.url].views + 1;
+                    $('#page' + pages[msg.url].pageId).html(pages[msg.url].views);
+                } else {
+                    pages[msg.url] = {views: 1, pageId: ++lastPageId};
+                    $('#pageViews tbody').append('<tr><td>' + msg.url + '</td><td id="page' + lastPageId + '">1</td></tr>');
+                }
+
+            }
+        });
+
+    });
+
+
+</script>
+
+</body>
+</html>
