@@ -18,9 +18,6 @@ io = io.listen(server);
 
 
 io.configure(function () {
-
-    io.set("transports", ["xhr-polling"]);
-    io.set("polling duration", 10);
     io.set('authorization', function (handshakeData, callback) {
         if (handshakeData.xdomain) {
             callback('Cross-domain connections are not allowed');
