@@ -27,13 +27,14 @@
 
 	<script type="text/javascript" src="socket.io/socket.io.js"></script>
     <script>
-        var socket = io.connect();
-        socket.on('connect', function () {
-            socket.send(window.location.href);
-        });
-        window.onhashchange = function () {
-            socket.send(window.location.href);
-        }
+// UNCOMMENT THIS CODE IF YOU USE THE "serverwithanalytics" SERVER
+//        var socket = io.connect();
+//        socket.on('connect', function () {
+//            socket.send(window.location.href);
+//        });
+//        window.onhashchange = function () {
+//            socket.send(window.location.href);
+//        }
     </script>
 
 </head>
