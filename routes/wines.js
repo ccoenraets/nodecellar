@@ -63,8 +63,6 @@ exports.findAll = function(req, res) {
 
     db.collection('wines', function(err, collection) {
         collection.find().toArray(function(err, items) {
-            // We don't want the browser to cache the results 
-            res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
             if (err) {
                 //console.log('Error getting all wines: ' + err);
                 res.json(500, {'error':'An error has occurred!'});
