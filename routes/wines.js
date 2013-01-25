@@ -19,74 +19,169 @@ db.open(function(err, db) {
     }
 });
 
+// GET /wines/:id
 exports.findById = function(req, res) {
+
+    // At some point we may want to lock this api down!
+    // If this is on the Internet someone could easily
+    // steal, modify or delete your data! Need something like
+    // this on our api (assuming we have people authenticate):
+    // if (req.session.userAuthenticated) {
+
+    // We don't want the browser to cache the results 
+    res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+
     var id = req.params.id;
-    console.log('Retrieving wine: ' + id);
-    db.collection('wines', function(err, collection) {
-        collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, item) {
-            res.send(item);
+    // need to validate the id is in a valid format (24 hex)
+    var regexObj = /^[A-Fa-f0-9]{24}$/;
+    if (regexObj.test(id)) {
+        db.collection('wines', function(err, collection) {
+            // We will search for all docs with that ID
+            collection.find({'_id':new BSON.ObjectID(id)}).toArray(function(err, items) {
+                if (err) {
+                    //console.log('Error getting wine by ID: ' + id + ' Error: ' + err);
+                    res.json(500, {'error':'An error has occurred!'});
+                } else if (items.length != 1) {
+                    //console.log('Wine not found. ID: ' + id);
+                    res.json(404, {'message':'item not found'});
+                } else {
+                    //console.log('Success getting wine by ID: ' + id);
+                    res.json(200, items[0]);
+                }
+            });
         });
-    });
+    } else {
+        //console.log('Error invalid ID format: ' + id);
+        res.json(500, {'error':'invalid ID format'});
+    }
 };
 
+// GET /wines
 exports.findAll = function(req, res) {
+    // We don't want the browser to cache the results 
+    res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+
     db.collection('wines', function(err, collection) {
         collection.find().toArray(function(err, items) {
-            res.send(items);
+            if (err) {
+                //console.log('Error getting all wines: ' + err);
+                res.json(500, {'error':'An error has occurred!'});
+            } else {
+                //console.log('Success getting all wines.');
+                res.json(200, items);
+            }
         });
     });
 };
 
+// POST /wines
 exports.addWine = function(req, res) {
+    
+    // We don't want the browser to cache the results 
+    res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+
     var wine = req.body;
-    console.log('Adding wine: ' + JSON.stringify(wine));
     db.collection('wines', function(err, collection) {
         collection.insert(wine, {safe:true}, function(err, result) {
             if (err) {
-                res.send({'error':'An error has occurred'});
+                //console.log('Error adding wine: ' + err);
+                res.json(500, {'error':'An error has occurred'});
             } else {
-                console.log('Success: ' + JSON.stringify(result[0]));
-                res.send(result[0]);
+                //console.log('Success adding wine: ' + JSON.stringify(result[0]));
+                res.json(201, result[0]);
             }
         });
     });
 }
 
+// PUT /wines/:id
 exports.updateWine = function(req, res) {
+
+    // We don't want the browser to cache the results 
+    res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+
     var id = req.params.id;
     var wine = req.body;
-    delete wine._id;
-    console.log('Updating wine: ' + id);
-    console.log(JSON.stringify(wine));
-    db.collection('wines', function(err, collection) {
-        collection.update({'_id':new BSON.ObjectID(id)}, wine, {safe:true}, function(err, result) {
-            if (err) {
-                console.log('Error updating wine: ' + err);
-                res.send({'error':'An error has occurred'});
-            } else {
-                console.log('' + result + ' document(s) updated');
-                res.send(wine);
-            }
+    delete wine._id;        // remove the ID field
+
+    // need to validate the id is in a valid format (24 hex)
+    var regexObj = /^[A-Fa-f0-9]{24}$/;
+    if (regexObj.test(id)) {
+        db.collection('wines', function(err, collection) {
+            // Let's see if we find the item before we try to update it
+            collection.find({'_id':new BSON.ObjectID(id)}).toArray(function(err, items) {
+                if (err) {
+                    // handle error (500)
+                    //console.log('Error updating wine: ' + err);
+                    res.json(500, {'error':'An error has occurred'});
+                } else if (items.length != 1) {
+                    // item doesn't exist  (or we have bigger issues)
+                    //console.log('Wine to update not found: ' + id);
+                    res.json(404, {'message':'Wine to update not found: ' + id});
+                } else {
+                    // Update item
+                    collection.update({'_id':new BSON.ObjectID(id)}, wine, {safe:true}, function(err, result) {
+                        if (err) {
+                            //console.log('Error updating wine.  ID: ' + id + ' Error: ' + err);
+                            res.json(500, {'error':'An error has occurred!'});
+                        } else {
+                            //console.log('Success updating wine: ' + result + ' document(s) updated');
+                            res.json(200, wine);
+                        }
+                    });
+                }
+            });
         });
-    });
+    } else {
+        //console.log('Error invalid ID format: ' + id);
+        res.json(500, {'error':'invalid ID format'});
+    }
 }
 
+// DELETE /wines/:id
 exports.deleteWine = function(req, res) {
+
+    // We don't want the browser to cache the results 
+    res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+
     var id = req.params.id;
-    console.log('Deleting wine: ' + id);
-    db.collection('wines', function(err, collection) {
-        collection.remove({'_id':new BSON.ObjectID(id)}, {safe:true}, function(err, result) {
-            if (err) {
-                res.send({'error':'An error has occurred - ' + err});
-            } else {
-                console.log('' + result + ' document(s) deleted');
-                res.send(req.body);
-            }
+    // need to validate the id is in a valid format (24 hex)
+    var regexObj = /^[A-Fa-f0-9]{24}$/;
+
+    if (regexObj.test(id)) {
+        db.collection('wines', function(err, collection) {
+            // Let's see if we find the item before we try to delete it
+            collection.find({'_id':new BSON.ObjectID(id)}).toArray(function(err, items) {
+                if (err) {
+                    // handle error (500)
+                    console.log('Error deleting wine: ' + err);
+                    res.json(500, {'error':'An error has occurred'});
+                } else if (items.length != 1) {
+                    // item doesn't exist  (or we have bigger issues)
+                    console.log('Cannot delete, wine not found: ' + id);
+                    res.json(404, {'message':'Cannot delete, wine not found. ID: ' + id});
+                } else {
+                    // Remove item
+                    collection.remove({'_id':new BSON.ObjectID(id)}, {safe:true}, function(err, result) {
+                        if (err) {
+                            //console.log('Error deleting wine.  ID: ' + id + ' Error: ' + err);
+                            res.json(500, {'error':'An error has occurred - ' + err});
+                        } else {
+                            //console.log('Success deleting wine: ' + result + ' document(s) deleted');
+                            // HTTP 204 No Content: The server successfully processed the request, but is not returning any content
+                            res.json(204);
+                        }
+                    });
+                }
+            });
         });
-    });
+    } else {
+        //console.log('Error invalid ID format: ' + id);
+        res.json(500, {'error':'invalid ID format'});
+    }
 }
 
-/*--------------------------------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------------------*/
 // Populate database with sample data -- Only used once: the first time the application is started.
 // You'd typically not find this code in a real-life app, since the database would already exist.
 var populateDB = function() {
@@ -260,7 +355,7 @@ var populateDB = function() {
         grapes: "Zinfandel",
         country: "USA",
         region: "California",
-        description: "o yourself a favor and have a bottle (or two) of this fine zinfandel on hand for your next romantic outing.  The only thing that can make this fine choice better is the company you share it with.",
+        description: "Do yourself a favor and have a bottle (or two) of this fine zinfandel on hand for your next romantic outing.  The only thing that can make this fine choice better is the company you share it with.",
         picture: "fourvines.jpg"
     },
     {
@@ -310,7 +405,13 @@ var populateDB = function() {
     }];
 
     db.collection('wines', function(err, collection) {
-        collection.insert(wines, {safe:true}, function(err, result) {});
+        collection.insert(wines, {safe:true}, function(err, result) {
+            if (err) {
+                console.log('Error adding sample wines: ' + err);
+            } else {
+                console.log('Success adding sample wines');
+            }
+        });
     });
 
 };
