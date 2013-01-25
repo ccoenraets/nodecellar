@@ -106,7 +106,7 @@
         console.log('Socket connected');
 
         socket.on('pageview', function (msg) {
-            $('#connections').html(msg.connections);
+            $('#connections').html(msg.connections - 1);  // less one since we don't count our own dashboard connection
             if (msg.url) {
                 if ($('#visits tr').length > 10) {
                     $('#visits tr:last').remove();

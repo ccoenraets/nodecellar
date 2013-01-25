@@ -113,11 +113,11 @@ exports.updateWine = function(req, res) {
                 if (err) {
                     // handle error (500)
                     //console.log('Error updating wine: ' + err);
-                    res.send(500, {'error':'An error has occurred'});
+                    res.json(500, {'error':'An error has occurred'});
                 } else if (items.length != 1) {
                     // item doesn't exist  (or we have bigger issues)
                     //console.log('Wine to update not found: ' + id);
-                    res.send(404, {'message':'Wine to update not found: ' + id});
+                    res.json(404, {'message':'Wine to update not found: ' + id});
                 } else {
                     // Update item
                     collection.update({'_id':new BSON.ObjectID(id)}, wine, {safe:true}, function(err, result) {
@@ -155,11 +155,11 @@ exports.deleteWine = function(req, res) {
                 if (err) {
                     // handle error (500)
                     console.log('Error deleting wine: ' + err);
-                    res.send(500, {'error':'An error has occurred'});
+                    res.json(500, {'error':'An error has occurred'});
                 } else if (items.length != 1) {
                     // item doesn't exist  (or we have bigger issues)
                     console.log('Cannot delete, wine not found: ' + id);
-                    res.send(404, {'message':'Cannot delete, wine not found. ID: ' + id});
+                    res.json(404, {'message':'Cannot delete, wine not found. ID: ' + id});
                 } else {
                     // Remove item
                     collection.remove({'_id':new BSON.ObjectID(id)}, {safe:true}, function(err, result) {
