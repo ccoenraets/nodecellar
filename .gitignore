@@ -2,3 +2,5 @@
 /.idea
 Procfile
 .gitignore
+*.sublime-project
+*.sublime-workspace

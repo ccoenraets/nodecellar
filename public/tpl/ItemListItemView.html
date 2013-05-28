@@ -1,0 +1,10 @@
+<a href="#items/<%= _id %>" class="thumbnail plain" style="text-align: center;">
+    <img src="<%= picture === null ? 'pics/generic.jpg' : picture %>" alt="">
+    <h5><%= name %></h5>
+    <ul class="itemlistattributes">
+      <li>Owner: <%= owner %></li>
+<!--       <li>Description: <%= description %></li>
+ -->      <li><span class="<%= available %>"></span>Available: <%= available %></li>
+    </ul>
+    <i class="icon-globe"></i>
+</a>

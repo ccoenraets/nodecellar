@@ -1,6 +1,6 @@
 {
-    "name": "wine-cellar",
-    "description": "Wine Cellar Application",
+    "name": "item-cellar",
+    "description": "Item Share Application",
     "version": "0.0.1",
     "private": true,
     "dependencies": {

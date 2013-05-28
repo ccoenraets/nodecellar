@@ -51,8 +51,11 @@ h5 {
 
 .thumbnail {
     min-width: 260px;
+    min-height: 270px;
 }
-
+.thumbnail img {
+    max-height: 150px;
+}
 .thumbnails li {
     margin-left: 0px !important;
     margin-right: 20px !important;
@@ -122,4 +125,16 @@ legend {
 .well h3 {
     margin-top: 0px;
     margin-bottom: 0px;
+}
+.nav-collapse .dropdown-menu {
+    display: none;
+}
+.nav-collapse .open .dropdown-menu {
+    display: block;
+}
+.itemlistattributes {
+    list-style: none;
+}
+* {
+    word-wrap:break-word;
 }
