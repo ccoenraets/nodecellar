@@ -2,10 +2,12 @@ var AppRouter = Backbone.Router.extend({
 
     routes: {
         ""                  : "home",
-        "wines"	: "list",
-        "wines/page/:page"	: "list",
-        "wines/add"         : "addWine",
-        "wines/:id"         : "wineDetails",
+        "items"	            : "list",
+        "items/page/:page"	: "list",
+        "items/add"         : "addItem",
+        "items/:id"         : "itemDetails",
+        "owner/:owner/items": "ownerList",
+        "owner/:owner/items/page/:page": "ownerList",
         "about"             : "about"
     },
 
@@ -24,24 +26,32 @@ var AppRouter = Backbone.Router.extend({
 
 	list: function(page) {
         var p = page ? parseInt(page, 10) : 1;
-        var wineList = new WineCollection();
-        wineList.fetch({success: function(){
-            $("#content").html(new WineListView({model: wineList, page: p}).el);
+        var itemList = new ItemCollection();
+        itemList.fetch({success: function(){
+            $("#content").html(new ItemListView({model: itemList, page: p}).el);
         }});
         this.headerView.selectMenuItem('home-menu');
     },
-
-    wineDetails: function (id) {
-        var wine = new Wine({_id: id});
-        wine.fetch({success: function(){
-            $("#content").html(new WineView({model: wine}).el);
+    ownerList: function(owner,page) {
+        console.log('ownerList');
+        var p = page ? parseInt(page, 10) : 1;
+        var itemList = new OwnerItemCollection([],{owner_id:owner});
+        itemList.fetch({success: function(){
+            $("#content").html(new ItemListView({model: itemList, page: p}).el);
+        }});
+        this.headerView.selectMenuItem('home-menu');
+    },
+    itemDetails: function (id) {
+        var item = new Item({_id: id});
+        item.fetch({success: function(){
+            $("#content").html(new ItemView({model: item}).el);
         }});
         this.headerView.selectMenuItem();
     },
 
-	addWine: function() {
-        var wine = new Wine();
-        $('#content').html(new WineView({model: wine}).el);
+	addItem: function() {
+        var item = new Item();
+        $('#content').html(new ItemView({model: item}).el);
         this.headerView.selectMenuItem('add-menu');
 	},
 
@@ -55,7 +65,7 @@ var AppRouter = Backbone.Router.extend({
 
 });
 
-utils.loadTemplate(['HomeView', 'HeaderView', 'WineView', 'WineListItemView', 'AboutView'], function() {
+utils.loadTemplate(['HomeView', 'HeaderView', 'ItemView', 'ItemListItemView', 'AboutView'], function() {
     app = new AppRouter();
     Backbone.history.start();
 });

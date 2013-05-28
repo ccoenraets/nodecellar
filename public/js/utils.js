@@ -11,7 +11,7 @@ window.utils = {
                     window[view].prototype.template = _.template(data);
                 }));
             } else {
-                alert(view + " not found");
+                console.log(view + " not found");
             }
         });
 

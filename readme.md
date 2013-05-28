@@ -2,7 +2,7 @@
 
 "Node Cellar" is a sample CRUD application built with with Backbone.js, Twitter Bootstrap, Node.js, Express, and MongoDB.
 
-The application allows you to browse through a list of wines, as well as add, update, and delete wines.
+The application allows you to browse through a list of items, as well as add, update, and delete items.
 
 This application is further documented [here](http://coenraets.org/blog).
 
