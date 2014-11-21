@@ -1,17 +1,20 @@
 var mongo = require('mongodb');
 
-console.log('Connecting to wine database... ');
 
 var Server = mongo.Server,
     Db = mongo.Db,
     BSON = mongo.BSONPure;
   
-var server = new mongo.Server('mongodb-f4h7y436.cloudapp.net', 27017, {
+var serverName = process.env.MongoDbServer || 'galini-mongodb.cloudapp.net',
+  usename = process.env.MongoDbUserName || 'wineUser',
+  password = process.env.MongoDbPassword;
+
+console.log('Connecting to wine database on ' + serverName + '  with user ' + usename + '... ');
+
+var server = new mongo.Server(serverName, 27017, {
     auto_reconnect: true
   }),
-  db = new mongo.Db('wine', server),
-  usename = process.env.MongoDbUserName,
-  password = process.env.MongoDbPassword;
+  db = new mongo.Db('wine', server);
 
 // callback: (err, db)
 function openDatabase(callback) {
@@ -51,6 +54,8 @@ db.open(function(err, db) {
                 populateDB();
             }
         });
+    } else {
+        console.log("Error while connecting to database " + JSON.stringify(err));
     }
 });
 

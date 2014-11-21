@@ -1,3 +1,7 @@
+
+Run .\bin\mongo --port 27017
+
+
 use wine
 db.createUser(
     {
