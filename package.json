@@ -6,10 +6,11 @@
     "dependencies": {
         "express": "3.x",
         "mongodb": "1.1.8",
-        "socket.io": "0.9.10"
+        "socket.io": "0.9.10",
+        "mongoose" : "3.8.12"
     },
     "engines": {
-        "node": "0.8.4",
-        "npm": "1.1.49"
+        "node": "0.10.32",
+        "npm": "1.4.9"
     }
 }

@@ -9,29 +9,10 @@ This application is further documented [here](http://coenraets.org/blog).
 The application is also hosted online. You can test it [here](http://nodecellar.coenraets.org).
 
 
-## To run the application on your own Heroku account:##
-
-1. Install the [Heroku Toolbelt](http://toolbelt.heroku.com)
-
-2. [Sign up](http://heroku.com/signup) for a Heroku account
-
-3. Login to Heroku from the `heroku` CLI:
-
-        $ heroku login
-
-4. Create a new app on Heroku:
-
-        $ heroku create
-
-5. Add the [MongoLab Heroku Add-on](http://addons.heroku.com/mongolab)
-
-        $ heroku addons:add mongolab
-
-6. Upload the app to Heroku:
-
-        $ git push heroku master
-
-7. Open the app in your browser:
-
-        $ heroku open
-
+## To run the application on your own Azure account:##
+1. Setup mongo db to Azure VM - see setup folder for hints
+2. In Azure websites create App settings:
+	a. MongoDbServer with DNS for the MongoDb which listens on port 27017
+	a. MongoDbUserName with username to wine database - default user is wineUser
+	b. MongoDbPassword - password for the user with readWrite access
+	c. TODO create variable for the server

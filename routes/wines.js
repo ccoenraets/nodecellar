@@ -1,11 +1,49 @@
 var mongo = require('mongodb');
 
+
 var Server = mongo.Server,
     Db = mongo.Db,
     BSON = mongo.BSONPure;
+  
+var serverName = process.env.MongoDbServer || 'galini-mongodb.cloudapp.net',
+  usename = process.env.MongoDbUserName || 'wineUser',
+  password = process.env.MongoDbPassword;
 
-var server = new Server('localhost', 27017, {auto_reconnect: true});
-db = new Db('winedb', server, {safe: true});
+console.log('Connecting to wine database on ' + serverName + '  with user ' + usename + '... ');
+
+var server = new mongo.Server(serverName, 27017, {
+    auto_reconnect: true
+  }),
+  db = new mongo.Db('wine', server);
+
+// callback: (err, db)
+function openDatabase(callback) {
+  db.open(function(err, db) {
+    if (err)
+      return callback(err);
+
+    console.log('Database connected');
+
+    return callback(null, db);
+  });
+}
+
+// callback: (err, collection)
+function authenticate(db1, username, password, callback) {
+  db1.authenticate(username, password, function(err, result) {
+    if (err) {
+      return callback (err);
+    }
+    if (result) {
+      var collection = new mongo.Collection(db1, 'wines');
+
+      // always, ALWAYS return the error object as the first argument of a callback
+      return callback(null, collection);
+    } else {
+      return callback (new Error('authentication failed'));
+    }
+  });
+}
 
 db.open(function(err, db) {
     if(!err) {
@@ -16,6 +54,8 @@ db.open(function(err, db) {
                 populateDB();
             }
         });
+    } else {
+        console.log("Error while connecting to database " + JSON.stringify(err));
     }
 });
 
