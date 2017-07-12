@@ -4,12 +4,14 @@
     "version": "0.0.1",
     "private": true,
     "dependencies": {
-        "express": "3.x",
-        "mongodb": "1.1.8",
-        "socket.io": "0.9.10"
+        "express": "4.15.3",
+        "body-parser": "1.17.2",
+        "morgan": "1.8.2",
+        "mongodb": "2.2.30",
+        "socket.io": "2.0.3"
     },
     "engines": {
-        "node": "0.8.4",
-        "npm": "1.1.49"
+        "node": "8.1.4",
+        "npm": "5.2.0"
     }
 }
