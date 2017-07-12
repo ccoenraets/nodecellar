@@ -4,14 +4,17 @@ var Server = mongo.Server,
     Db = mongo.Db,
     ObjectID = mongo.ObjectID;
 
-var server = new Server('localhost', 27017, {auto_reconnect: true});
-db = new Db('winedb', server, {safe: true});
+var db;
 
-db.open(function(err, db) {
+var mongoUri = process.env.MONGOLAB_URI || "mongodb://localhost/nodecellar";
+
+mongo.connect(mongoUri, {}, function(err, database) {
+    db = database;
+
     if(!err) {
         console.log("Connected to 'winedb' database");
-        db.collection('wines', {safe:true}, function(err, collection) {
-            if (err) {
+        db.collections(function(err, collections) {
+            if (collections.indexOf("wines") == -1) {
                 console.log("The 'wines' collection doesn't exist. Creating it with sample data...");
                 populateDB();
             }
