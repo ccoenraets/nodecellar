@@ -1,4 +1,4 @@
-# Node Cellar Sample Application with Backbone.js, Twitter Bootstrap, Node.js, Express, and MongoDB #
+# Node Cellar Sample Application with Backbone.js, Twitter Bootstrap, Node.js, Express, and MongoDB
 
 "Node Cellar" is a sample CRUD application built with with Backbone.js, Twitter Bootstrap, Node.js, Express, and MongoDB.
 
@@ -9,7 +9,7 @@ This application is further documented [here](http://coenraets.org/blog).
 The application is also hosted online. You can test it [here](http://nodecellar.coenraets.org).
 
 
-## To run the application on your own Heroku account:##
+## To run the application on your own Heroku account:
 
 1. Install the [Heroku Toolbelt](http://toolbelt.heroku.com)
 
